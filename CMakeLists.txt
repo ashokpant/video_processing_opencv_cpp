@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(opencv_cpp_examples)
+project(video_processing_opencv_cpp)
 find_package(OpenCV REQUIRED)
 set(CMAKE_CXX_STANDARD 14)
 
