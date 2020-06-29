@@ -100,12 +100,26 @@ class IdCardDetector {
         return t;
     }
 
+    template<typename T>
+    T erase(T &v, int m, int n) {
+        v.erase(v.begin() + m, v.begin() + n + 1);
+        return v;
+    }
+
+    template<typename T>
+    T getTopK(T &v, int k) {
+        for (int i = k+1; i < v.size(); i++) {
+            v.pop_back();
+        }
+        return v;
+    }
+
     vector<vector<Point>> sortContoursByContourArea(vector<vector<Point>> contours, int topK) {
         // Descending
         if (topK > 0) {
             topK = std::min(topK, (int) contours.size());
             std::partial_sort(contours.begin(), contours.begin() + topK, contours.end(), compareContourArea);
-            return slice(contours, 0, topK);
+            return getTopK(contours, topK);
         } else {
             std::sort(contours.begin(), contours.begin(), compareContourArea);
             return contours;
