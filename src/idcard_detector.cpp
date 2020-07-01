@@ -40,11 +40,7 @@ public:
         IdCardResult::img = img;
     }
 
-    friend ostream &operator<<(ostream &os, const IdCardResult &result) {
-        os << "rect: " << result.rect << " polygon: " << result.polygon << " img: " << result.img;
-        return os;
-    }
-};
+    };
 
 class IdCardDetector {
 
