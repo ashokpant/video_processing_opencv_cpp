@@ -1,7 +1,7 @@
 // Created by: Ashok Kumar Pant
 // Created on: 7/1/20
 
-#include "commons.h"
+#include "../include/commons.h"
 
 Mat resize(const Mat &img, int width, int height, bool resizeLarger) {
     int h = img.size().height;

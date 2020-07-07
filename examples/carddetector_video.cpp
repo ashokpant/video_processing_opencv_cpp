@@ -1,6 +1,6 @@
 // Created by: Ashok Kumar Pant
 // Created on: 6/26/20
-#include "carddetector.h"
+#include "../include/carddetector.h"
 
 int main(int argc, char **argv) {
     VideoCapture capture = cv::VideoCapture(0);

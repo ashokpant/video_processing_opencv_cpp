@@ -1,4 +1,4 @@
-#include "linedetector.h"
+#include "../include/linedetector.h"
 
 void LineDetector::mergeLines(SEGMENT *seg1, SEGMENT *seg2, SEGMENT *seg_merged) {
     double xg = 0.0, yg = 0.0;
@@ -205,7 +205,7 @@ void LineDetector::extractSegments(vector<Point2i> *points, vector<SEGMENT> *seg
             l_points.push_back(pt);
         }
 
-        // Line check fail, test next point
+        // Line check fail, tests next point
         if (is_line == false)
             continue;
 

@@ -1,4 +1,4 @@
-#include "linedetector.h"
+#include "../include/linedetector.h"
 
 int main(int argc, char **argv) {
     VideoCapture capture = cv::VideoCapture(0);

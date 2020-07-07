@@ -1,5 +1,5 @@
 
-#include "edlines.h"
+#include "../include/edlines.h"
 
 #include <list>
 #include <cmath>

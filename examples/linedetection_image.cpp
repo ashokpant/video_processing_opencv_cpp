@@ -1,4 +1,4 @@
-#include "linedetector.h"
+#include "../include/linedetector.h"
 
 std::string getCmdOption(int argc, char* argv[], const std::string& option, string fallback)
 {

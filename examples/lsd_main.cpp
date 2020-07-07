@@ -4,8 +4,8 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>
-#include "commons.h"
-#include "lsdlines.h"
+#include "../include/commons.h"
+#include "../include/lsdlines.h"
 
 using namespace std;
 using namespace cv;

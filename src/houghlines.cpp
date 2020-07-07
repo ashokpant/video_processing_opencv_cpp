@@ -1,4 +1,4 @@
-#include "houghlines.h"
+#include "../include/houghlines.h"
 
 #include "stdio.h"
 #include <math.h>

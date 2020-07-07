@@ -2,7 +2,7 @@
 // Created on: 7/7/20
 
 
-#include "imgquality.h"
+#include "../include/imgquality.h"
 
 double ImgQuality::getBrightnessScore(const Mat &img) {
     // Output range = [0-1], higher the better
@@ -39,7 +39,7 @@ double ImgQuality::getBlurScore(const Mat &img) {
     }
 }
 
-void ImgQuality::hasGlare(const Mat &img, double &min, double &max) {
+void ImgQuality::getGlareScore(const Mat &img, double &min, double &max) {
     //Glare if max >= 253.0 && min <= 0.0
     try {
         Mat gray;
@@ -55,7 +55,7 @@ void ImgQuality::hasGlare(const Mat &img, double &min, double &max) {
     }
 }
 
-void ImgQuality::hasGlare1(const Mat &img, double &min, double &max) {
+void ImgQuality::getGlareScore1(const Mat &img, double &min, double &max) {
     try {
         Mat hsv = Mat();
         cv::cvtColor(img, hsv, COLOR_BGR2HSV);

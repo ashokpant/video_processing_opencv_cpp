@@ -12,14 +12,14 @@ using namespace cv;
 using namespace std;
 
 class ImgQuality {
-
+public:
     static double getBrightnessScore(const Mat &img);
 
     static double getBlurScore(const Mat &img);
 
-    static void hasGlare(const Mat &img, double &min, double &max);
+    static void getGlareScore(const Mat &img, double &min, double &max);
 
-    static void hasGlare1(const Mat &img, double &min, double &max);
+    static void getGlareScore1(const Mat &img, double &min, double &max);
 };
 
 #endif //VIDEO_PROCESSING_OPENCV_CPP_IMGQUALITY_HXX
