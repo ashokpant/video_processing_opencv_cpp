@@ -30,7 +30,7 @@ vector<line_float_t> lsd_detect_lines(const Mat &img) {
     bbox.height = h;
     std::vector<line_float_t> lsdLines = vector<line_float_t>();
     int success = LsdLineDetector(bytes, w, h, 1.0, 1.0, bbox, lsdLines);
-    vector<line_float_t> lines = vector<line_float_t>();
+    vector <line_float_t> lines = vector<line_float_t>();
     if (success == 0) {
         for (line_float_t _line : lsdLines) {
             line_float_t line = line_float_t();
