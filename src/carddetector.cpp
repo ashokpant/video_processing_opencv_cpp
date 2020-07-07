@@ -289,7 +289,7 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
     // line: [x1, y1, x2, y2, angle]
     namedWindow("Vertical", 1);
     namedWindow("Horizontal", 1);
-    namedWindow("Card", 1);
+    namedWindow("Region proposals", 1);
     Mat img1 = img.clone();
     Mat img2 = img.clone();
     Mat img3 = img.clone();
@@ -410,9 +410,7 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
             corners.push_back(Point(bottomX, maxY));
             cout << string_format("V: %d,- %d, , %d - %d", topX, minY, bottomX, maxY) << endl;
         }
-        cv::imshow("Vertical1", verticalLinesCanvas);
-        cv::imshow("Horizontal1", horizontalLinesCanvas);
-        cv::imshow("Card", img4);
+        cv::imshow("Region proposals", img4);
         Mat hv = Mat();
         cv::add(horizontalLinesCanvas, verticalLinesCanvas, hv);
         for (int i = 0; i < hv.rows; i++) {
@@ -427,21 +425,6 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
     return corners;
 }
 
-vector<std::array<int, 5>> convert(const vector<SEGMENT> &segments) {
-
-    vector<std::array<int, 5>> lines;
-
-    for (SEGMENT line:segments) {
-        std::array<int, 5> l{};
-        l[0] = line.x1;
-        l[1] = line.y1;
-        l[2] = line.x2;
-        l[3] = line.y2;
-        l[4] = line.angle * 180 / PI;
-        lines.push_back(l);
-    }
-    return lines;
-}
 
 static Mat resize(const Mat &img, int width, int height, bool resizeLarger) {
     int h = img.size().height;
@@ -488,7 +471,7 @@ static bool compareContourArea(const vector<Point> &i1, const vector<Point> &i2)
     return o1 > o2;
 }
 
-int getAngle(Point pt1, Point pt2, Point pt3) {
+int getAngle(const Point& pt1, const Point& pt2, const Point& pt3) {
 
     //    Returns the angle between the line segment from p2 to p1
     //    and the line segment from p2 to p3 in degrees
@@ -621,25 +604,6 @@ vector<vector<Point>> combo(const T &c, int k) {
     return combinations;
 }
 
-//    public List<Point> orderPoints(List<Point> pts) {
-//        List<Point> points = sortPoints(pts, true);
-//        List<Point> leftMost = Arrays.asList(points.get(0), points.get(1));
-//        List<Point> rightMost = Arrays.asList(points.get(points.size() - 1), points.get(points.size() - 2));
-//        leftMost = sortPoints(leftMost, false);
-//        Point tl = leftMost.get(0);
-//        Point bl = leftMost.get(1);
-//        double[][] dists = cdist(Collections.singletonList(tl), rightMost);
-//        Point br;
-//        Point tr;
-//        if (dists[0][0] > dists[0][1]) {
-//            br = rightMost.get(0);
-//            tr = rightMost.get(1);
-//        } else {
-//            br = rightMost.get(1);
-//            tr = rightMost.get(0);
-//        }
-//        return Arrays.asList(tl, bl, br, tr);
-//    }
 vector<Point> orderPoints(vector<Point> &pts) {
     vector<Point> pts1 = sortPoints(pts, true);
     vector<Point> leftmost = {pts1[0], pts1[1]};
@@ -653,22 +617,6 @@ vector<Point> orderPoints(vector<Point> &pts) {
     vector<Point> ordered = {tl, bl, tr, br};
     return ordered;
 }
-
-//    List<MatOfPoint> sortContoursByAngleRange(List<MatOfPoint> contours, int topK) {
-//        // Ascending
-//        Collections.sort(contours, new Comparator<MatOfPoint>() {
-//            @Override
-//            public int compare(MatOfPoint o1, MatOfPoint o2) {
-//                double a1 = angleRange(o1);
-//                double a2 = angleRange(o2);
-//                return Double.compare(a1, a2);
-//            }
-//        });
-//        if (topK > 0) {
-//            contours = contours.subList(0, Math.min(topK, contours.size()));
-//        }
-//        return contours;
-//    }
 
 
 vector<vector<Point>> getQuadrilateralPoints(const vector<Point> &corners) {
@@ -685,25 +633,7 @@ vector<vector<Point>> getQuadrilateralPoints(const vector<Point> &corners) {
     }
     return quadPoints;
 }
-//public List<List<Point>> getQuadrilateralPoints(List<Point> corners) {
-//    // Get valid quadrilateral points
-//    List<List<Point>> contours = new ArrayList<>();
-//    if (corners.size() >= 4) {
-//        List<MatOfPoint> quads = new ArrayList<>();
-//        for (Set<Point> pts : Sets.combinations(ImmutableSet.copyOf(corners), 4)) {
-//            List<Point> points = orderPoints(new ArrayList<>(pts));
-//            MatOfPoint qp = new MatOfPoint();
-//            qp.fromList(points);
-//            quads.add(qp);
-//        }
-//        quads = sortContoursByContourArea(quads, 3);
-//        quads = sortContoursByAngleRange(quads, 0);
-//        for (MatOfPoint p : quads) {
-//            contours.add(p.toList());
-//        }
-//    }
-//    return contours;
-//}
+
 
 int IdCardDetector::detectV1(Mat &img, IdCardResult &result) {
     try {
