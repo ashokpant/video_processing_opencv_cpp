@@ -567,9 +567,14 @@ vector<vector<Point>> sortContoursByAngleRange(vector<vector<Point>> contours, i
     }
 }
 
-static bool isValidRect(const Rect &rect, int imWidth, int imHeight) {
-    double MIN_QUAD_AREA_RATIO = 0.10;
-    return rect.area() > imHeight * imWidth * MIN_QUAD_AREA_RATIO;
+
+bool isValidRect(Rect rect, int imWidth, int imHeight) {
+    double MIN_QUAD_AREA_RATIO = 0.15;
+    float aspectRatio = rect.height > rect.width ? (float) rect.height / rect.width : (float) rect.width / rect.height;
+    return aspectRatio > 1.3
+           && aspectRatio < 1.7
+           && rect.area() > imHeight * imWidth * MIN_QUAD_AREA_RATIO
+           && rect.area() < imHeight * imWidth * 0.95;
 }
 
 
@@ -641,6 +646,15 @@ vector<IdCardResult> filterQuadrilaterals(vector<vector<Point>> contours, bool c
         if (isValidRect(r, w, h)) {
             Rect rect = Rect((int) (r.x * scale), (int) (r.y * scale), (int) (r.width * scale),
                              (int) (r.height * scale));
+            if (docPortrait) {
+                if (rect.height < rect.width) {
+                    continue;
+                }
+            } else {
+                if (rect.height > rect.width) {
+                    continue;
+                }
+            }
             vector<Point> polygon;
             for (const Point &p : contour) {
                 polygon.push_back(Point(p.x * scale, p.y * scale));
@@ -654,7 +668,7 @@ vector<IdCardResult> filterQuadrilaterals(vector<vector<Point>> contours, bool c
     return results;
 }
 
-int IdCardDetector::detectV1(Mat &img, IdCardResult &result) {
+int IdCardDetector::detectV1(Mat &img, IdCardResult &result, bool camPortrait, bool docPortrait) {
     try {
         int oh = img.size().height;
         int ow = img.size().width;

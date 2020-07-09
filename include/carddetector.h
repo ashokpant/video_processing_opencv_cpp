@@ -49,7 +49,7 @@ public:
 
 class IdCardDetector {
 
-    int detectV1(Mat &img, IdCardResult &result);
+    int detectV1(Mat &img, IdCardResult &result, bool camPortrait = false, bool docPortrait = false);
 
     // camPortrait: camera orientation
     // docPortrait: document layout orientation
