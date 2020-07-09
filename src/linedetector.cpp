@@ -390,7 +390,7 @@ void LineDetector::lineDetection(Mat &src, vector<SEGMENT> &segments_all, bool m
             segments.clear();
         }
     }
-    if (!merge)
+    if (!merge || segments_tmp.empty())
         return;
 
     bool is_merged = false;
