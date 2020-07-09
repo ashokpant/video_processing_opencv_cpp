@@ -471,7 +471,7 @@ static bool compareContourArea(const vector<Point> &i1, const vector<Point> &i2)
     return o1 > o2;
 }
 
-int getAngle(const Point& pt1, const Point& pt2, const Point& pt3) {
+int getAngle(const Point &pt1, const Point &pt2, const Point &pt3) {
 
     //    Returns the angle between the line segment from p2 to p1
     //    and the line segment from p2 to p3 in degrees
@@ -618,7 +618,6 @@ vector<Point> orderPoints(vector<Point> &pts) {
     return ordered;
 }
 
-
 vector<vector<Point>> getQuadrilateralPoints(const vector<Point> &corners) {
     vector<vector<Point>> quadPoints;
     if (corners.size() >= 4) {
@@ -634,6 +633,26 @@ vector<vector<Point>> getQuadrilateralPoints(const vector<Point> &corners) {
     return quadPoints;
 }
 
+vector<IdCardResult> filterQuadrilaterals(vector<vector<Point>> contours, bool camPortrait,
+                                          bool docPortrait, int w, int h, int scale) {
+    vector<IdCardResult> results;
+    for (const vector<Point> &contour : contours) {
+        Rect r = cv::boundingRect(contour);
+        if (isValidRect(r, w, h)) {
+            Rect rect = Rect((int) (r.x * scale), (int) (r.y * scale), (int) (r.width * scale),
+                             (int) (r.height * scale));
+            vector<Point> polygon;
+            for (const Point &p : contour) {
+                polygon.push_back(Point(p.x * scale, p.y * scale));
+            }
+            IdCardResult result = IdCardResult();
+            result.setRect(rect);
+            result.setPolygon(polygon);
+            results.push_back(result);
+        }
+    }
+    return results;
+}
 
 int IdCardDetector::detectV1(Mat &img, IdCardResult &result) {
     try {
@@ -691,11 +710,14 @@ int IdCardDetector::detectV1(Mat &img, IdCardResult &result) {
     }
 }
 
-int IdCardDetector::detectV3(Mat &img, IdCardResult &result) {
+
+int IdCardDetector::detectV3(Mat &img, IdCardResult &result, bool camPortrait, bool docPortrait) {
+
     try {
         int oh = img.size().height;
         int ow = img.size().width;
         Mat image = resizeLargestDim(img, 640, true);
+        Mat image1 = image.clone();
         int h = image.size().height;
         int w = image.size().width;
         double scale = (float) ow / (float) w;
@@ -738,25 +760,17 @@ int IdCardDetector::detectV3(Mat &img, IdCardResult &result) {
         stop = high_resolution_clock::now();
         duration = duration_cast<milliseconds>(stop - start);
         cout << "Time - quad compute: " << duration.count() << " milliseconds" << endl;
-        Rect rect;
-        vector<Point> polygon;;
-        for (const vector<Point> &contour : contours) {
-            Rect r = cv::boundingRect(contour);
-            if (isValidRect(r, w, h)) {
-                rect = r;
-                rect = Rect((int) (rect.x * scale), (int) (rect.y * scale), (int) (rect.width * scale),
-                            (int) (rect.height * scale));
-                for (const Point &p : contour) {
-                    polygon.push_back(Point(p.x * scale, p.y * scale));
-                }
-                break;
+        vector<IdCardResult> results = filterQuadrilaterals(contours, camPortrait, docPortrait, w, h, scale);
+        if (!results.empty()) {
+            for (const auto r : results) {
+                auto rect = r.getRect();
+                cv::rectangle(image1, Point(rect.x, rect.y), Point(rect.x + rect.width, rect.y + rect.height),
+                              Scalar(0, 127, 255), 4);
             }
-        }
-
-        if (!rect.empty()) {
+            cv::imshow("Valid Rects", image1);
             result = IdCardResult();
-            result.setRect(rect);
-            result.setPolygon(polygon);
+            result.setRect(results[0].getRect());
+            result.setPolygon(results[0].getPolygon());
             return 1;
         }
         return 0;
@@ -769,4 +783,6 @@ int IdCardDetector::detectV3(Mat &img, IdCardResult &result) {
 IdCardDetector::IdCardDetector() {
     lineDetector = LineDetector(1.5, 20);
 }
+
+
 

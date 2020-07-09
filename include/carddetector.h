@@ -51,13 +51,15 @@ class IdCardDetector {
 
     int detectV1(Mat &img, IdCardResult &result);
 
-    int detectV3(Mat &img, IdCardResult &result);
+    // camPortrait: camera orientation
+    // docPortrait: document layout orientation
+    int detectV3(Mat &img, IdCardResult &result, bool camPortrait = false, bool docPortrait = false);
 
     LineDetector lineDetector;
 
 public:
-    int detect(Mat &img, IdCardResult &result) {
-        return detectV3(img, result);
+    int detect(Mat &img, IdCardResult &result, bool camPortrait = true, bool docPortrait = false) {
+        return detectV3(img, result, camPortrait, docPortrait);
     }
 
     IdCardDetector();
