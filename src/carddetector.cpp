@@ -236,9 +236,6 @@ vector<Point> getCornersV1(const Mat &img, const vector<std::array<int, 5>> &lin
         verticalLinesCanvas = Mat::zeros(imSize, CV_8U);
         for (vector<Point> points : contours) {
             points = sortPoints(points, false);
-            for (Point p:points) {
-                cout << p.x << " " << p.y << endl;
-            }
             int minY = (int) points[0].y;
             int maxY = (int) points[points.size() - 1].y;
             vector<int> minX = vector<int>();

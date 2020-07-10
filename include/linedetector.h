@@ -64,7 +64,6 @@ public:
 
     void detect(Mat &src, vector<array<int, 5>> &lines, bool merge = true) {
         std::vector<Segment> lsdLines = vector<Segment>();
-        cout<<"detect"<<endl;
         lineDetection(src, lsdLines, merge);
 
         for (Segment line:lsdLines) {
@@ -76,7 +75,6 @@ public:
             l[4] = line.angle * 180 / PI;
             lines.push_back(l);
         }
-        cout<<"detect done"<<endl;
     }
 
 private:
