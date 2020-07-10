@@ -21,30 +21,37 @@ public:
         return rect;
     }
 
-    void setRect(const Rect &rect) {
-        IdCardResult::rect = rect;
+    void setRect(const Rect &r) {
+        IdCardResult::rect = r;
     }
 
     const vector<Point> &getPolygon() const {
         return polygon;
     }
 
-    void setPolygon(const vector<Point> &polygon) {
-        IdCardResult::polygon = polygon;
+    void setPolygon(const vector<Point> &p) {
+        IdCardResult::polygon = p;
     }
 
     const Mat &getImg() const {
         return img;
     }
 
-    void setImg(const Mat &img) {
-        IdCardResult::img = img;
+    void setImg(const Mat &image) {
+        IdCardResult::img = image;
     }
 
     friend ostream &operator<<(ostream &os, const IdCardResult &result) {
         os << "rect: " << result.rect << " polygon: " << result.polygon << " img: " << result.img;
         return os;
     }
+
+    std::string toString() {
+        ostringstream ss;
+        ss << this;
+        return ss.str();
+    }
+
 };
 
 class IdCardDetector {

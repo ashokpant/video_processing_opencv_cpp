@@ -83,7 +83,7 @@ bool predicate(const vector<Point> &corners, const Point &point) {
     return true;
 }
 
-vector<Point> filterCorners(vector<Point> corners) {
+vector<Point> filterCorners(const vector<Point>& corners) {
     // Filters corners that are within min_dist of others
     vector<Point> filtered = vector<Point>();
     for (const Point &p : corners) {
@@ -222,8 +222,8 @@ vector<Point> getCornersV1(const Mat &img, const vector<std::array<int, 5>> &lin
                         Scalar(255, 0, 255));
             cv::line(img4, Point(minX, leftY), Point(maxX, rightY), Scalar(255, 255, 255), 2);
             cv::line(horizontalLinesCanvas, Point(minX, leftY), Point(maxX, rightY), Scalar(1, 1, 1), 1);
-            corners.push_back(Point(minX, leftY));
-            corners.push_back(Point(maxX, rightY));
+            corners.emplace_back(minX, leftY);
+            corners.emplace_back(maxX, rightY);
             cout << string_format("H: %d,- %d, , %d - %d", minX, leftY, maxX, rightY) << endl;
         }
 
@@ -262,8 +262,8 @@ vector<Point> getCornersV1(const Mat &img, const vector<std::array<int, 5>> &lin
             cv::putText(img4, "B", Point(bottomX, maxY), FONT_HERSHEY_SIMPLEX, 1,
                         Scalar(0, 255, 255));
             cv::line(img4, Point(topX, minY), Point(bottomX, maxY), Scalar(255, 255, 255), 2);
-            corners.push_back(Point(topX, minY));
-            corners.push_back(Point(bottomX, maxY));
+            corners.emplace_back(topX, minY);
+            corners.emplace_back(bottomX, maxY);
             cout << string_format("V: %d,- %d, , %d - %d", topX, minY, bottomX, maxY) << endl;
         }
         cv::imshow("Vertical1", verticalLinesCanvas);
@@ -274,7 +274,7 @@ vector<Point> getCornersV1(const Mat &img, const vector<std::array<int, 5>> &lin
         for (int i = 0; i < hv.rows; i++) {
             for (int j = 0; j < hv.cols; j++) {
                 if (hv.at<int>(i, j) == 2) {
-                    corners.push_back(Point(i, j));
+                    corners.emplace_back(i, j);
                 }
             }
         }
@@ -366,8 +366,8 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
                         Scalar(255, 0, 255));
             cv::line(img4, Point(minX, leftY), Point(maxX, rightY), Scalar(255, 255, 255), 2);
             cv::line(horizontalLinesCanvas, Point(minX, leftY), Point(maxX, rightY), Scalar(1, 1, 1), 1);
-            corners.push_back(Point(minX, leftY));
-            corners.push_back(Point(maxX, rightY));
+            corners.emplace_back(minX, leftY);
+            corners.emplace_back(maxX, rightY);
             cout << string_format("H: %d,- %d, , %d - %d", minX, leftY, maxX, rightY) << endl;
         }
 
@@ -380,7 +380,7 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
         verticalLinesCanvas = Mat::zeros(imSize, CV_8U);
         for (vector<Point> points : contours) {
             points = sortPoints(points, false);
-            for (Point p:points) {
+            for (const Point& p:points) {
                 cout << p.x << " " << p.y << endl;
             }
             int minY = (int) points[0].y;
@@ -406,8 +406,8 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
             cv::putText(img4, "B", Point(bottomX, maxY), FONT_HERSHEY_SIMPLEX, 1,
                         Scalar(0, 255, 255));
             cv::line(img4, Point(topX, minY), Point(bottomX, maxY), Scalar(255, 255, 255), 2);
-            corners.push_back(Point(topX, minY));
-            corners.push_back(Point(bottomX, maxY));
+            corners.emplace_back(topX, minY);
+            corners.emplace_back(bottomX, maxY);
             cout << string_format("V: %d,- %d, , %d - %d", topX, minY, bottomX, maxY) << endl;
         }
         cv::imshow("Region proposals", img4);
@@ -416,7 +416,7 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
         for (int i = 0; i < hv.rows; i++) {
             for (int j = 0; j < hv.cols; j++) {
                 if (hv.at<int>(i, j) == 2) {
-                    corners.push_back(Point(i, j));
+                    corners.emplace_back(i, j);
                 }
             }
         }
@@ -568,7 +568,7 @@ vector<vector<Point>> sortContoursByAngleRange(vector<vector<Point>> contours, i
 }
 
 
-bool isValidRect(Rect rect, int imWidth, int imHeight) {
+bool isValidRect(const Rect& rect, int imWidth, int imHeight) {
     double MIN_QUAD_AREA_RATIO = 0.15;
     float aspectRatio = rect.height > rect.width ? (float) rect.height / rect.width : (float) rect.width / rect.height;
     return aspectRatio > 1.3
@@ -638,8 +638,8 @@ vector<vector<Point>> getQuadrilateralPoints(const vector<Point> &corners) {
     return quadPoints;
 }
 
-vector<IdCardResult> filterQuadrilaterals(vector<vector<Point>> contours, bool camPortrait,
-                                          bool docPortrait, int w, int h, int scale) {
+vector<IdCardResult> filterQuadrilaterals(const vector<vector<Point>>& contours, bool camPortrait,
+                                          bool docPortrait, int w, int h, double scale) {
     vector<IdCardResult> results;
     for (const vector<Point> &contour : contours) {
         Rect r = cv::boundingRect(contour);
@@ -657,7 +657,7 @@ vector<IdCardResult> filterQuadrilaterals(vector<vector<Point>> contours, bool c
             }
             vector<Point> polygon;
             for (const Point &p : contour) {
-                polygon.push_back(Point(p.x * scale, p.y * scale));
+                polygon.emplace_back(p.x * scale, p.y * scale);
             }
             IdCardResult result = IdCardResult();
             result.setRect(rect);
@@ -776,7 +776,7 @@ int IdCardDetector::detectV3(Mat &img, IdCardResult &result, bool camPortrait, b
         cout << "Time - quad compute: " << duration.count() << " milliseconds" << endl;
         vector<IdCardResult> results = filterQuadrilaterals(contours, camPortrait, docPortrait, w, h, scale);
         if (!results.empty()) {
-            for (const auto r : results) {
+            for (const auto& r : results) {
                 auto rect = r.getRect();
                 cv::rectangle(image1, Point(rect.x, rect.y), Point(rect.x + rect.width, rect.y + rect.height),
                               Scalar(0, 127, 255), 4);
