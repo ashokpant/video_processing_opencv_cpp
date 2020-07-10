@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
         if (!s) {
             break;
         }
-        vector<SEGMENT> lines;
+        vector<Segment> lines;
         lines.clear();
         Mat src_gray;
         cvtColor(src, src_gray, COLOR_RGB2GRAY);
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
         cvtColor(blank, blank_color, COLOR_GRAY2BGR);
 
         for (size_t i = 0; i < lines.size(); i++) {
-            SEGMENT seg = lines.at(i);
+            Segment seg = lines.at(i);
 
             int b = (seg.label * 12337) % 256;
             int g = (seg.label * 24776) % 256;

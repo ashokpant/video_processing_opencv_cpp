@@ -13,7 +13,7 @@
 //https://github.com/ashokpant/linedetector
 using namespace std;
 using namespace cv;
-struct SEGMENT {
+struct Segment {
     float x1, y1, x2, y2, angle;
     int label;
 };
@@ -38,34 +38,36 @@ public:
     template<class tType>
     void incidentPoint(tType *pt, Mat &l);
 
-    void mergeLines(SEGMENT *Seg1, SEGMENT *Seg2, SEGMENT *SegMerged);
+    void mergeLines(Segment *Seg1, Segment *Seg2, Segment *SegMerged);
 
-    bool getPointChain(const Mat &img, Point pt, Point *chained_pt, int
+    bool getPointChain(const Mat &img, const Point& pt, Point *chained_pt, int
     &direction, int step);
 
     // bool getPointChain( const Mat & img, const Mat & scales, const Point pt, Point * chained_pt, int
     // & direction, int step );
     double distPointLine(const Mat &p, Mat &l);
 
-    bool mergeSegments(SEGMENT *seg1, SEGMENT *seg2, SEGMENT *seg_merged);
+    bool mergeSegments(Segment *seg1, Segment *seg2, Segment *seg_merged);
 
-    void extractSegments(vector<Point2i> *points, vector<SEGMENT> *segments);
+    void extractSegments(vector<Point2i> *points, vector<Segment> *segments);
 
-    void lineDetection(Mat &src, vector<SEGMENT> &segments_all, bool merge = true);
+    void lineDetection(Mat &src, vector<Segment> &segments_all, bool merge = true);
 
     void pointInboardTest(Mat &src, Point2i *pt);
 
-    void getAngle(SEGMENT *seg);
+    void getAngle(Segment *seg);
 
-    void additionalOperationsOnSegments(Mat &src, SEGMENT *seg);
+    void additionalOperationsOnSegments(Mat &src, Segment *seg);
 
-    void drawArrow(Mat &mat, const SEGMENT *seg, Scalar bgr = Scalar(0, 255, 0),
+    void drawArrow(Mat &mat, const Segment *seg, const Scalar& bgr = Scalar(0, 255, 0),
                    int thickness = 1, bool directed = true);
 
     void detect(Mat &src, vector<array<int, 5>> &lines, bool merge = true) {
-        std::vector<SEGMENT> lsdLines = vector<SEGMENT>();
+        std::vector<Segment> lsdLines = vector<Segment>();
+        cout<<"detect"<<endl;
         lineDetection(src, lsdLines, merge);
-        for (SEGMENT line:lsdLines) {
+
+        for (Segment line:lsdLines) {
             std::array<int, 5> l = {};
             l[0] = line.x1;
             l[1] = line.y1;
@@ -74,6 +76,7 @@ public:
             l[4] = line.angle * 180 / PI;
             lines.push_back(l);
         }
+        cout<<"detect done"<<endl;
     }
 
 private:
