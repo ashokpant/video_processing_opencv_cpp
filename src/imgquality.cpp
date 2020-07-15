@@ -5,7 +5,7 @@
 #include "../include/imgquality.h"
 
 double ImgQuality::getBrightnessScore(const Mat &img) {
-    // Output range = [0-1], higher the better
+    // Output range = [0-1], dark if < 0.20, bright if > 0.80
     try {
         Mat hsv = Mat();
         cv::cvtColor(img, hsv, COLOR_BGR2HSV);
@@ -18,7 +18,7 @@ double ImgQuality::getBrightnessScore(const Mat &img) {
 }
 
 double ImgQuality::getBlurScore(const Mat &img) {
-    // Focus measure: Output range: >0, >100 is better
+    // Focus measure: Output range: >0, blur if <100
     try {
         Mat gray;
         if (img.channels() > 2) {
@@ -67,4 +67,26 @@ void ImgQuality::getGlareScore1(const Mat &img, double &min, double &max) {
     } catch (Exception &e) {
         cerr << e.what() << endl;
     }
+}
+
+double ImgQuality::getGlareScore2(const Mat &img) {
+//   glare if  > 5000 && < 8500;
+    try {
+        Mat gray;
+        if (img.channels() > 2) {
+            cv::cvtColor(img, gray, COLOR_BGR2GRAY);
+        } else {
+            gray = img.clone();
+        }
+        Mat bi = Mat();
+        cv::threshold(gray, bi, 200, 255, cv::THRESH_BINARY);
+        Mat mu = Mat();
+        Mat sigma = Mat();
+        cv::meanStdDev(bi, mu, sigma);
+        double fm = sigma.at<double>(0, 0) * sigma.at<double>(0, 0);
+        return fm;
+    } catch (Exception &e) {
+        cerr << e.what() << endl;
+    }
+    return 0;
 }

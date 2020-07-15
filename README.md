@@ -39,3 +39,11 @@ Conference on. IEEE, 2014.
 
 * Zhang, Guoxuan, et al. "Building a 3-D Line-Based Map Using Stereo SLAM."
 Robotics, IEEE Transactions on 31.6 (2015): 1364-1377.
+
+#### Glare detection
+* http://vision.eng.shizuoka.ac.jp/pubs/pdfs/glare_mehran_2017.pdf 
+* https://ieeexplore.ieee.org/document/7899744
+
+
+#### Id card detection
+* https://arxiv.org/pdf/1807.05786.pdf
