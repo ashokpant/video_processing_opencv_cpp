@@ -83,7 +83,7 @@ bool predicate(const vector<Point> &corners, const Point &point) {
     return true;
 }
 
-vector<Point> filterCorners(const vector<Point>& corners) {
+vector<Point> filterCorners(const vector<Point> &corners) {
     // Filters corners that are within min_dist of others
     vector<Point> filtered = vector<Point>();
     for (const Point &p : corners) {
@@ -377,7 +377,7 @@ getCornersWithGivenLineAngle(const Mat &img, const vector<std::array<int, 5>> &l
         verticalLinesCanvas = Mat::zeros(imSize, CV_8U);
         for (vector<Point> points : contours) {
             points = sortPoints(points, false);
-            for (const Point& p:points) {
+            for (const Point &p:points) {
                 cout << p.x << " " << p.y << endl;
             }
             int minY = (int) points[0].y;
@@ -565,7 +565,7 @@ vector<vector<Point>> sortContoursByAngleRange(vector<vector<Point>> contours, i
 }
 
 
-bool isValidRect(const Rect& rect, int imWidth, int imHeight) {
+bool isValidRect(const Rect &rect, int imWidth, int imHeight) {
     double MIN_QUAD_AREA_RATIO = 0.15;
     float aspectRatio = rect.height > rect.width ? (float) rect.height / rect.width : (float) rect.width / rect.height;
     return aspectRatio > 1.3
@@ -635,7 +635,7 @@ vector<vector<Point>> getQuadrilateralPoints(const vector<Point> &corners) {
     return quadPoints;
 }
 
-vector<IdCardResult> filterQuadrilaterals(const vector<vector<Point>>& contours, bool camPortrait,
+vector<IdCardResult> filterQuadrilaterals(const vector<vector<Point>> &contours, bool camPortrait,
                                           bool docPortrait, int w, int h, double scale) {
     vector<IdCardResult> results;
     for (const vector<Point> &contour : contours) {
@@ -773,7 +773,7 @@ int IdCardDetector::detectV3(Mat &img, IdCardResult &result, bool camPortrait, b
         cout << "Time - quad compute: " << duration.count() << " milliseconds" << endl;
         vector<IdCardResult> results = filterQuadrilaterals(contours, camPortrait, docPortrait, w, h, scale);
         if (!results.empty()) {
-            for (const auto& r : results) {
+            for (const auto &r : results) {
                 auto rect = r.getRect();
                 cv::rectangle(image1, Point(rect.x, rect.y), Point(rect.x + rect.width, rect.y + rect.height),
                               Scalar(0, 127, 255), 4);
@@ -794,6 +794,3 @@ int IdCardDetector::detectV3(Mat &img, IdCardResult &result, bool camPortrait, b
 IdCardDetector::IdCardDetector() {
     lineDetector = LineDetector(1.5, 20);
 }
-
-
-
