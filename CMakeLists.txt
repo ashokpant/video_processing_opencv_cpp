@@ -26,3 +26,4 @@ target_link_libraries(imgquality ${OpenCV_LIBS})
 
 add_library(idcard SHARED src/imgquality.cpp src/carddetector.cpp src/linedetector.cpp src/facedetector.cpp)
 target_link_libraries(idcard ${OpenCV_LIBS})
+

@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     }
 
     LineDetector ld = LineDetector(dt, lt);
-    vector<SEGMENT> lines;
+    vector<Segment> lines;
     Mat src_old;
     Mat src = imread(filename, 1);
     if (src.cols == 0) {
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     cout << "Writing coordinates of lines to file " << outfile << endl;
     fptr = fopen(outfile.c_str(), "w");
     for (size_t i = 0; i < lines.size(); i++) {
-        SEGMENT seg = lines.at(i);
+        Segment seg = lines.at(i);
         fprintf(fptr, "%d %.5f %.5f %.5f %.5f %.5f \n", seg.label, seg.angle, seg.x1, seg.y1, seg.x2, seg.y2);
     }
     fclose(fptr);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     cvtColor(blank, blank_color, COLOR_GRAY2BGR);
 
     for (size_t i = 0; i < lines.size(); i++) {
-        SEGMENT seg = lines.at(i);
+        Segment seg = lines.at(i);
 
         int b = (seg.label * 12337) % 256;
         int g = (seg.label * 24776) % 256;
